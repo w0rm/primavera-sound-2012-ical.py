@@ -10,7 +10,6 @@ from BeautifulSoup import BeautifulSoup
 url = "http://sanmiguelprimaverasound.es/programacion?lang=en"
 soup = BeautifulSoup(urllib.urlopen(url).read()) 
 
-tz = pytz.utc
 cal = vobject.newFromBehavior('vcalendar')
 cal.add('prodid').value = '-//Andrey Kuzmin//goo.gl/fNwV1//'
 
@@ -40,14 +39,14 @@ for day_list in content.findAll("dt", {"class": "title"}):
                 hours = int(hours)
                 minutes = int(minutes)
                 
-                dtstart = datetime(2012, month, date, hours, minutes, 0, tzinfo=tz)
+                dtstart = datetime(2012, month, date, hours, minutes, 0)
                 if hours < 6: # if time is less than 6am, then it is the next day
                     dtstart += timedelta(hours=24)
                 event.add('dtstart').value = dtstart
                 event.add('dtend').value = dtstart+timedelta(hours=1) # Assuming that each show takes 1 hour
             else:
                 # Event takes the whole day if no time specified
-                dtstart = datetime(2012, month, date, 0, 0, 0, tzinfo=tz)
+                dtstart = datetime(2012, month, date, 0, 0, 0)
                 event.add('dtstart').value = dtstart
                 event.add('dtend').value = dtstart+timedelta(hours=24)
 
